@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scatterplot</title>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <style>
+        svg {
+            border: 3px solid black;
+        }
+        svg circle {
+            fill: purple;
+            stroke-width: 3;
+            stroke: black;
+        }
+    </style>
+</head>
+<body>
+    <div id = "chart">
+        <svg></svg>
+    </div>
+
+    <script>
+        var width = 800;
+        var height = 500;
+        var margins = { 
+            left: 30,
+            right: 30,
+            top: 30,
+            bottom: 40
+
+        };
+
+        var circleData = [ {x: 7, y: 4, radius: 4}, {x: 2, y: 8, radius: 8}, {x: 8, y: 2, radius: 5}, 
+        {x: 3, y: 3, radius: 2}, {x: 6, y: 8, radius: 1}, {x: 1, y: 1, radius: 5}];
+
+        var xscale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([0, width - margins.left - margins.right]);
+        var yscale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([height - margins.top - margins.bottom, 0]);
+        var xaxis = d3.axisBottom(xscale) 
+                    .ticks(10);
+        var yaxis = d3.axisLeft(yscale)
+                    .ticks(10);
+        var svg = d3.select("svg")
+            .attr("width", width)
+            .attr("height", height);
+        svg.append("g")
+            .attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+            .call(yaxis);
+        svg.append("g")
+            .attr("transform", "translate(" + margins.left + "," + (height - margins.bottom) + ")")
+            .call(xaxis);
+
+        var circles = svg.selectAll("chart")
+            .data(circleData)
+            .enter()
+            .append("circle");
+        
+        circles
+            .attr("cx", function (d) { return margins.right + xscale(d.x); })
+            .attr("cy", function (d) { return margins.top + yscale(d.y); })
+            .attr("r", function (d) { return 10 * d.radius; });
+    </script>
+</body>
+</html>

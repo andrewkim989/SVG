@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SVG Bar Chart</title>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <style>
+        svg {
+            border: 3px solid black;
+        }
+        svg rect {
+            fill: url(#gradient);
+            stroke: black;
+            stroke-width: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>SVG Animated Bar Chart</h1>
+    <div id = "chart">
+        <svg>
+            <defs> 
+                <linearGradient id = "gradient" x1 = "0" x2 = "0" y1 = "0" y2 = "1">
+                    <stop offset = "0%" stop-color = "purple"></stop>
+                    <stop offset = "100%" stop-color = "orange"></stop>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <script>
+        var height = 500;
+        var width = 800;
+        var margins = {
+            left: 40,
+            top: 40,
+            right: 40,
+            bottom: 40
+        }
+
+        var barData = [ {strength: 38}, {strength: 13}, {strength: 24}, {strength: 5}, 
+            {strength: 48}, {strength: 30}, {strength: 16}, {strength: 43}, {strength: 14}, 
+            {strength: 8}, {strength: 22}, {strength: 35} ];
+        var barData2 = [ {strength: 13}, {strength: 5}, {strength: 22}, {strength: 16}, 
+            {strength: 40}, {strength: 49}, {strength: 27}, {strength: 28}, {strength: 34},
+            {strength: 19}, {strength: 39}, {strength: 35} ];
+        
+        var xscale = d3.scaleLinear()
+                .domain([0, 12])
+                .range([0, width - margins.left - margins.right]);
+        var yscale = d3.scaleLinear()
+                .domain([0, 50])
+                .range([height - margins.top - margins.bottom, 0]);
+        var xaxis = d3.axisBottom(xscale) 
+                    .ticks(10);
+        var yaxis = d3.axisLeft(yscale)
+                    .ticks(10);
+        var svg = d3.select("svg")
+            .attr("width", width)
+            .attr("height", height);
+        svg.append("g")
+            .attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+            .call(yaxis);
+        svg.append("g")
+            .attr("transform", "translate(" + margins.left + "," + (height - margins.bottom) + ")")
+            .call(xaxis);
+        
+        var barWidth = Math.floor((width - margins.left - margins.right) / barData.length);
+
+        var bars = svg.selectAll("#chart")
+            .data(barData);
+        
+        bars
+            .enter()
+            .append("rect")
+            .attr("height", function (d) { return height - margins.bottom - margins.top - 
+                yscale(d.strength); })
+            .attr("width", function () { return barWidth; })
+            .attr("x", function (d, i) { return margins.left + 30 + xscale(i); })
+            .attr("y", function (d) { return margins.bottom + yscale(d.strength); });
+        
+        setTimeout(function() {
+            var bars = d3.select("#chart")
+                .selectAll("rect")
+                .data(barData2);
+            
+            bars
+                .transition()
+                .duration(1500)
+                .attr("height", function (d) { return height - margins.bottom - margins.top - 
+                    yscale(d.strength); })
+                .attr("width", function () { return barWidth; })
+                .attr("x", function (d, i) { return margins.left + 30 + xscale(i); })
+                .attr("y", function (d) { return margins.bottom + yscale(d.strength); });
+        }, 2000);
+    </script>
+</body>
+</html>

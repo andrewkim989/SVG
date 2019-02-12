@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SVG Tutorial</title>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <style>
+        svg {
+            width: 200px;
+            height: 100px;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id = "chart">
+        <svg>
+            <rect height="50" width="20" x="20" y="50" fill="blue" stroke="black" stroke-width="2"></rect>
+            <circle cx="100" cy="50" r="50" fill="red" stroke="black" stroke-width="2"></circle>
+            <line x1="100" y1="50" x2="100" y2="0" stroke="black" stroke-dasharray="5,5"></line>
+            <line x1="20" y1="50" x2="20" y2="0" stroke="black" stroke-dasharray="5,5"></line>
+            <line x1="0" y1="50" x2="100" y2="50" stroke="black" stroke-dasharray="5,5"></line>
+        </svg>
+    </div>
+</body>
+</html>
